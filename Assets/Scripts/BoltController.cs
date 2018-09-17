@@ -32,12 +32,12 @@ public class BoltController : MonoBehaviour
             case "Asteroid":
                 Instantiate(m_eAsteroid, other.transform.position, other.transform.rotation);
                 Destroy(other.transform.gameObject);
-                StartCoroutine(CheckIsAlive(m_eAsteroid));
+                StartCoroutine(CheckIsPlaying(m_eAsteroid));
                 break;
             case "Enemy":
                 Instantiate(m_eAsteroid, other.transform.position, other.transform.rotation);
                 Destroy(other.transform.gameObject);
-                StartCoroutine(CheckIsAlive(m_eAsteroid));
+                StartCoroutine(CheckIsPlaying(m_eAsteroid));
                 break;
             default:
                 break;
@@ -48,14 +48,15 @@ public class BoltController : MonoBehaviour
     {
         
     }
-    IEnumerator CheckIsAlive(GameObject go)
+    IEnumerator CheckIsPlaying(GameObject go)
     {
         Debug.Log(go.gameObject.name);
         var par = go.GetComponent<ParticleSystem>();
-        yield return new WaitWhile(() => !par.IsAlive());
+        yield return new WaitWhile(() => par.isPlaying);
 
-        Debug.Log(par.IsAlive());
+        Debug.Log(par.isPlaying);
         Debug.Log(go.name);
+        Destroy(go);
         yield break;
     }
 }

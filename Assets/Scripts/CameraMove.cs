@@ -5,38 +5,56 @@ using UnityEngine;
 public class CameraMove : MonoBehaviour
 {
     [SerializeField] GameObject m_player;
+    MainManager m_mm;
     GameObject m_cameraPos;
     private Rigidbody m_rb;
     private Quaternion m_rot;
     private Quaternion m_r;
     [SerializeField] float x = 40f;
     private Vector3 m_diff;
-    [SerializeField] float m_ac = 10f;
+    [SerializeField] float m_ac = 0f;
+    /// <summary>ステージ開始後カメラを滑らかにスピードアップさせるフラグ</summary>
+    private bool m_flagAcceleratioin = true;
 
 
     private void Start()
     {
         m_rb = GetComponent<Rigidbody>();
         m_cameraPos = GameObject.Find("CameraPos");
+        m_mm = GameObject.Find("MainManager").GetComponent<MainManager>();
+        m_ac = 0f;
 
     }
 
     private void FixedUpdate()
     {
-        m_diff = m_player.transform.position - transform.position;
-        m_rb.velocity = m_diff * m_ac;
-        //transform.position = m_cameraPos.transform.position;
-        m_rot = Quaternion.LookRotation(m_diff, m_player.transform.up);
-        m_r = m_rot * Quaternion.Inverse(transform.rotation);
-        if (m_r.w < 0f)
+        if (m_mm.m_startFlag)                           //stage startしている間
         {
-            m_r.x = -m_r.x;
-            m_r.y = -m_r.y;
-            m_r.z = -m_r.z;
-            m_r.w = -m_r.w;
+            if (m_flagAcceleratioin)                    //加速度が一定に達する迄加速
+            {
+                if (m_ac > 5f)
+                {
+                    m_ac = 5f;
+                    m_flagAcceleratioin = false;
+                }
+                m_ac += Time.deltaTime;
+            }
+
+            m_diff = m_cameraPos.transform.position - transform.position;               //このm_diffはCameraPosition用のオブジェクトとカメラとの差異を計算してvelocityが向かう先はCameraPosにして減速しても変なカメラアングルにならない様に設定している
+            m_rb.velocity = m_diff * m_ac;
+            m_diff = m_player.transform.position - transform.position;                  //このm_diffはプレイヤーとの差異を取っており、視線は常にプレイヤーを追うようになっている
+            m_rot = Quaternion.LookRotation(m_diff, m_player.transform.up);
+            m_r = m_rot * Quaternion.Inverse(transform.rotation);                       //Multiply by the reciprocal of quaternion
+            if (m_r.w < 0f)                                                             //Quaterion成分がマイナスの時はプラスに変えて近い方の回転に変換している
+            {
+                m_r.x = -m_r.x;
+                m_r.y = -m_r.y;
+                m_r.z = -m_r.z;
+                m_r.w = -m_r.w;
+            }
+            m_rb.AddTorque(new Vector3(m_r.x, m_r.y, m_r.z) * x, ForceMode.VelocityChange);
+            transform.rotation = m_rot;
         }
-        m_rb.AddTorque(new Vector3(m_r.x, m_r.y, m_r.z) * x, ForceMode.VelocityChange);
-        transform.rotation = m_rot;
     }
 
 }

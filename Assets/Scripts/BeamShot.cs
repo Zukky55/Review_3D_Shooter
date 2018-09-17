@@ -10,9 +10,10 @@ public class BeamShot : MonoBehaviour
     /// <summary>explosion of asteroid</summary>
     [SerializeField] GameObject m_eAsteroid;
     /// <summary>レーザーフラグ</summary>
-	private bool m_laserFrag = false;
-    /// <summary>Coroutine's frag</summary>
+	private bool m_laserFlag = false;
+    /// <summary>Coroutine's flag</summary>
 	private bool m_isRunning = false;
+    AudioSource m_audioS;
 
     Ray m_shotRay;
     RaycastHit m_shotHit;
@@ -28,6 +29,8 @@ public class BeamShot : MonoBehaviour
         {
             m_beamParticle.Play();
         }
+        
+
         m_lineRenderer.enabled = true;
         m_lineRenderer.SetPosition(0, transform.position);
         m_shotRay.origin = transform.position;
@@ -73,9 +76,9 @@ public class BeamShot : MonoBehaviour
             yield break;
         }
         m_isRunning = true;
-        m_laserFrag = true;
+        m_laserFlag = true;
         yield return new WaitForSeconds(m_lazerLife);
-        m_laserFrag = false;
+        m_laserFlag = false;
         yield return new WaitForSeconds(1f);
         m_isRunning = false;
 	}
@@ -85,23 +88,26 @@ public class BeamShot : MonoBehaviour
     {
         m_beamParticle = GetComponent<ParticleSystem>();
         m_lineRenderer = GetComponent<LineRenderer>();
+        m_audioS = GetComponent<AudioSource>();
+        m_audioS.volume = 0.2f;
     }
 
     private void Update()
     {
         //シフト押したらレーザーフラグon
-        if (Input.GetKey(KeyCode.LeftShift))
+        if (Input.GetMouseButton(1))
         {
             StartCoroutine(LaserCoroutine());
         }
 
         //フラグonならレーザー始動、offの時レーザーがシーン上にいる場合レーザー停止
-        if (m_laserFrag)
+        if (m_laserFlag)
         {
             Shot();
         }
         else if (m_lineRenderer.enabled)
         {
+
             DisableEffect();
         }
     }

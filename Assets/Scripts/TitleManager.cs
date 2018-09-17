@@ -14,15 +14,15 @@ namespace Shooter.Title
         [Range(0, 1)] public float m_alpha;
         /// <summary>TitlePayer.cs</summary>
         TitlePlayer m_tp;
-        /// <summary>Frag of change alpha color</summary>
-        private bool m_alphaFrag = false;
+        /// <summary>Flag of change alpha color</summary>
+        private bool m_alphaFlag = false;
         /// <summary>Time to change color</summary>
         private float m_changeTime = 3f;
 
         IEnumerator Wait(float time)
         {
             yield return new WaitForSeconds(time);
-            m_alphaFrag = true;
+            m_alphaFlag = true;
         }
 
         private void ChangingAlphaColor()
@@ -44,12 +44,12 @@ namespace Shooter.Title
         }
         private void Update()
         {
-            if (m_alphaFrag)
+            if (m_alphaFlag)
             {
                 if (m_alpha > 1f)
                 {
                     m_alpha = 1f;
-                    m_alphaFrag = false;
+                    m_alphaFlag = false;
                 }
                 m_alpha += Time.deltaTime / m_changeTime;
                 m_buttonImage.color = new Color(0.5f, 0.5f, 0.5f, m_alpha);

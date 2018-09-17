@@ -15,12 +15,12 @@ namespace Shooter.Title
         private Vector3 m_offsetPosition;
         private bool m_isRunning = false;
         [Range(0, 1)] [SerializeField] internal float x = 0;
-        internal bool frag = false;
+        internal bool flag = false;
         public float waitTime = 12.5f;
 
         void Update()
         {
-            if (frag)
+            if (flag)
             {
                 if (x < 1f)
                 {
@@ -60,9 +60,9 @@ namespace Shooter.Title
             while (true)
             {
                 yield return new WaitForSeconds(waitTime);
-                frag = true;
+                flag = true;
                 yield return new WaitForSeconds(5f);
-                frag = false;
+                flag = false;
 
             }
         }

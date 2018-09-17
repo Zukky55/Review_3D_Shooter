@@ -210,7 +210,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1043805762511418}
   m_LocalRotation: {x: -0.80947804, y: 0.32869157, z: -0.30814102, w: 0.37650543}
-  m_LocalPosition: {x: 0, y: 1.8, z: -7.7}
+  m_LocalPosition: {x: 0, y: 3.12, z: -6.58}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4053678768681986}
@@ -459,9 +459,9 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 9db9336e9f17c9744847c5fe94c1650f, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.2
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -649,7 +649,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 45efc082901884846b199f73b6b96879, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.1
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -785,18 +785,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 741bad8e0e8f4ea47b220ff4590b3616, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_boundary:
-    xMin: 0
-    xMax: 0
-    yMin: 0
-    yMax: 0
-    zMin: 0
-    zMax: 0
   m_shot: {fileID: 1982411859441562, guid: 15c6803fc6ee10a4ba05e9b8658d4b64, type: 2}
   m_shotSpawn: {fileID: 4777353502843988}
   m_fireRate: 0.25
-  m_setMoveSpeed: 0
-  m_turnAcceleration: 90
+  m_moveSpeed: 50
+  m_turningSpeed: 90
+  m_rotateTime: 2
 --- !u!120 &120099734453761336
 LineRenderer:
   m_ObjectHideFlags: 1
@@ -993,7 +987,7 @@ ParticleSystem:
   stopAction: 0
   looping: 1
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
@@ -5463,7 +5457,7 @@ ParticleSystem:
   stopAction: 0
   looping: 1
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
@@ -9933,7 +9927,7 @@ ParticleSystem:
   stopAction: 0
   looping: 1
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
@@ -14376,7 +14370,7 @@ ParticleSystem:
   stopAction: 0
   looping: 1
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
