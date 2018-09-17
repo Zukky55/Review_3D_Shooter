@@ -46,7 +46,7 @@ public class BeamShot : MonoBehaviour
                     Destroy(m_shotHit.transform.gameObject);
                     break;
                 case "Enemy":
-                    Instantiate(m_eEnemy, transformInfo.position, transformInfo.rotation);
+                    Instantiate(m_eAsteroid, transformInfo.position, transformInfo.rotation);
                     Destroy(m_shotHit.transform.gameObject);
                     break;
                 default:
@@ -76,6 +76,7 @@ public class BeamShot : MonoBehaviour
         m_laserFrag = true;
         yield return new WaitForSeconds(m_lazerLife);
         m_laserFrag = false;
+        yield return new WaitForSeconds(1f);
         m_isRunning = false;
 	}
 
@@ -89,7 +90,7 @@ public class BeamShot : MonoBehaviour
     private void Update()
     {
         //シフト押したらレーザーフラグon
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+        if (Input.GetKey(KeyCode.LeftShift))
         {
             StartCoroutine(LaserCoroutine());
         }

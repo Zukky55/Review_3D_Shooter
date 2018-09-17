@@ -26,7 +26,7 @@ public class CameraMove : MonoBehaviour
         m_diff = m_player.transform.position - transform.position;
         m_rb.velocity = m_diff * m_ac;
         //transform.position = m_cameraPos.transform.position;
-        //m_rot = Quaternion.LookRotation(m_diff, m_player.transform.up);
+        m_rot = Quaternion.LookRotation(m_diff, m_player.transform.up);
         m_r = m_rot * Quaternion.Inverse(transform.rotation);
         if (m_r.w < 0f)
         {

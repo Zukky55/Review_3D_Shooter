@@ -16,28 +16,28 @@ public class PlayerController : MonoBehaviour
     /// <summary>境界</summary>
     [SerializeField] Boundary m_boundary;
     /// <summary>弾</summary>
-    [SerializeField] GameObject m_shot;
+    [SerializeField]  public GameObject m_shot;
     /// <summary>弾のスポーンポイント</summary>
-    [SerializeField] Transform m_shotSpawn;
+    [SerializeField] public Transform m_shotSpawn;
     /// <summary>弾のファイヤーレート</summary>
     [SerializeField] float m_fireRate;
     /// <summary>弾の音</summary>
     AudioSource m_bs;
     /// <summary>Player's speed ()</summary>
-    [SerializeField] private float m_setMoveSpeed;
-    public float m_moveSpeed
+    [SerializeField] private float m_moveSpeed;
+    public float m_setMoveSpeed
     {
-        get { return m_setMoveSpeed; }
-        set { m_setMoveSpeed = value; }
+        get { return m_moveSpeed; }
+        set { m_moveSpeed = value; }
     }
- 
+    /// <summary>Player's Turning speed</summary>
+    [SerializeField] float m_turningSpeed;
     /// <summary>フレーム終了直前のposition</summary>
     private Vector3 m_offsetPosition;
     /// <summary>Input axis value</summary>
     private float m_horizontal, m_vertical;
     private bool m_isRunning = false;
 
-    [SerializeField] float m_turnAcceleration;
 
 
 
@@ -51,9 +51,9 @@ public class PlayerController : MonoBehaviour
     {
         float x = Input.GetAxis("Horizontal");
         float y = Input.GetAxis("Vertical");
-        var tilt = Quaternion.AngleAxis(-x * m_turnAcceleration * Time.deltaTime, transform.forward);
+        var tilt = Quaternion.AngleAxis(-x * m_turningSpeed * Time.deltaTime, transform.forward);
         //Quaternion yAxisRot = Quaternion.AngleAxis(x * m_turnAcceleration * Time.deltaTime, Vector3.up);
-        Quaternion xAxisRot = Quaternion.AngleAxis(y * m_turnAcceleration * Time.deltaTime, transform.right);
+        Quaternion xAxisRot = Quaternion.AngleAxis(y * m_turningSpeed * Time.deltaTime, transform.right);
         // 元の回転値と合成して上書き
         transform.rotation =tilt * xAxisRot * transform.rotation;        
 

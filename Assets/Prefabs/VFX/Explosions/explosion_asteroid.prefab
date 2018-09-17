@@ -44,7 +44,6 @@ GameObject:
   - component: {fileID: 400004}
   - component: {fileID: 19800004}
   - component: {fileID: 19900004}
-  - component: {fileID: 114807065313492030}
   - component: {fileID: 82392961292308456}
   m_Layer: 0
   m_Name: explosion_asteroid
@@ -18486,14 +18485,3 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &114807065313492030
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100004}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bcd11c66b317d69488a3d493f645690a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
