@@ -9,54 +9,77 @@ public class BoltController : MonoBehaviour
     [SerializeField] GameObject m_eEnemy;
     /// <summary>explosion of asteroid</summary>
     [SerializeField] GameObject m_eAsteroid;
-    Rigidbody m_rb;
-    GameObject m_player;
-    PlayerController m_pc;
-    ParticleSystem m_parA;
-    ParticleSystem m_parE;
+    private Rigidbody m_rb;
+    private Vector3 m_diff;
+    private ObjectController m_oc;
+    /// <summary>Attack power of Bolt</summary>
+    [SerializeField] int m_boltDamage = 3;
+    private GameObject m_motherShip;
+
+    /// <summary>Processing when a bolt is hit</summary>
+    /// <param name="other">Bumped object</param>
+    private void OnParticleCollision(GameObject other)
+    {
+        m_oc = other.GetComponent<ObjectController>();
+        
+        if (m_oc.m_myStatus.hitPoint > m_boltDamage && m_oc.m_type != Type.MotherShip)                    //If HP is greater than the attack power will give damage
+        {
+            m_oc.m_myStatus.hitPoint -= m_boltDamage;
+        }
+        else
+        {
+            switch (m_oc.m_type)
+            {
+                case Type.Planet:
+                    Destroy(Instantiate(m_eAsteroid, other.transform.position, other.transform.rotation), m_eAsteroid.GetComponent<ParticleSystem>().main.duration);
+                    GameManager.AddScore(m_oc.m_myStatus.point);
+                    Destroy(other.transform.gameObject);
+                    break;
+                case Type.Asteroid:
+                    Destroy(Instantiate(m_eAsteroid, other.transform.position, other.transform.rotation), m_eAsteroid.GetComponent<ParticleSystem>().main.duration);
+                    GameManager.AddScore(m_oc.m_myStatus.point);
+                    Destroy(other.transform.gameObject);
+                    break;
+                case Type.WeakEnemy:
+                    Destroy(Instantiate(m_eAsteroid, other.transform.position, other.transform.rotation), m_eAsteroid.GetComponent<ParticleSystem>().main.duration);
+                    GameManager.AddScore(m_oc.m_myStatus.point);
+                    Destroy(other.transform.gameObject);
+                    break;
+                case Type.NormalEnemy:
+                    Destroy(Instantiate(m_eAsteroid, other.transform.position, other.transform.rotation), m_eAsteroid.GetComponent<ParticleSystem>().main.duration);
+                    GameManager.AddScore(m_oc.m_myStatus.point);
+                    Destroy(other.transform.gameObject);
+                    break;
+                case Type.StrongEnemy:
+                    Destroy(Instantiate(m_eAsteroid, other.transform.position, other.transform.rotation), m_eAsteroid.GetComponent<ParticleSystem>().main.duration);
+                    GameManager.AddScore(m_oc.m_myStatus.point);
+                    Destroy(other.transform.gameObject);
+                    break;
+                case Type.MotherShip:
+                    break;
+                case Type.Other:
+                    break;
+                default:
+                    break;
+            }
+        }
+        Destroy(gameObject);
+    }
 
     void Start()
     {
         m_rb = GetComponent<Rigidbody>();
-        m_player = GameObject.Find("Player");
-        m_pc = m_player.GetComponent<PlayerController>();
-        // playerの動きに弾の速度を合わせる為プレイヤーが移動している時はそのスカラー量も掛ける
-        m_rb.velocity = transform.forward * m_speed;
-        m_parA = m_eAsteroid.GetComponent<ParticleSystem>();
-        m_parE = m_eEnemy.GetComponent<ParticleSystem>();
+        m_motherShip = GameObject.Find("MotherShip");
+        m_rb.velocity = transform.forward * m_speed;                                // Shot injection speed
     }
-    private void OnParticleCollision(GameObject other)
-    {
-        switch (other.gameObject.tag)
-        {
-            case "Asteroid":
-                Instantiate(m_eAsteroid, other.transform.position, other.transform.rotation);
-                Destroy(other.transform.gameObject);
-                StartCoroutine(CheckIsPlaying(m_eAsteroid));
-                break;
-            case "Enemy":
-                Instantiate(m_eAsteroid, other.transform.position, other.transform.rotation);
-                Destroy(other.transform.gameObject);
-                StartCoroutine(CheckIsPlaying(m_eAsteroid));
-                break;
-            default:
-                break;
-        }
-        Destroy(gameObject);
-    }
-    private void OnTriggerEnter(Collider other)
-    {
-        
-    }
-    IEnumerator CheckIsPlaying(GameObject go)
-    {
-        Debug.Log(go.gameObject.name);
-        var par = go.GetComponent<ParticleSystem>();
-        yield return new WaitWhile(() => par.isPlaying);
 
-        Debug.Log(par.isPlaying);
-        Debug.Log(go.name);
-        Destroy(go);
-        yield break;
+    private void Update()
+    {
+        m_diff = m_motherShip.transform.position - transform.position;
+        if(m_diff.magnitude > 2000f)
+        {
+            Destroy(gameObject);
+        }
     }
+
 }

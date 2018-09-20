@@ -5,7 +5,6 @@ using UnityEngine;
 public class CameraMove : MonoBehaviour
 {
     [SerializeField] GameObject m_player;
-    MainManager m_mm;
     GameObject m_cameraPos;
     private Rigidbody m_rb;
     private Quaternion m_rot;
@@ -21,14 +20,13 @@ public class CameraMove : MonoBehaviour
     {
         m_rb = GetComponent<Rigidbody>();
         m_cameraPos = GameObject.Find("CameraPos");
-        m_mm = GameObject.Find("MainManager").GetComponent<MainManager>();
         m_ac = 0f;
 
     }
 
     private void FixedUpdate()
     {
-        if (m_mm.m_startFlag)                           //stage startしている間
+        if (GameManager.m_startFlag)                           //stage startしている間
         {
             if (m_flagAcceleratioin)                    //加速度が一定に達する迄加速
             {

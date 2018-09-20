@@ -5,34 +5,24 @@ using UnityEngine.UI;
 
 public class Timer : MonoBehaviour
 {
-    /// <summary>The minute hand of the timer</summary>
-    public int m_setMinute
-    {
-        get { return m_minute; }
-        set { m_minute = value; }
-    }
-    [SerializeField] private int m_minute;
-    /// <summary>The second hand of the timer</summary>
-    public float m_setSeconds
-    {
-        get { return m_seconds; }
-        set { m_seconds = value; }
-    }
-    [SerializeField] private float m_seconds;
+    [SerializeField] private int m_setMinute;
+    /// <summary>The minute of the timer</summary>
+    private int m_minute;
+    [SerializeField] private float m_setSeconds;
+    /// <summary>The second of the timer</summary>
+    private float m_seconds;
     /// <summary>Seconds of the previous frame</summary>
     private float m_oldSeconds;
     /// <summary>Timer of SceneView</summary>
     private Text m_timerText;
-    /// <summary>Flag at the end of timer</summary>
-    private bool m_timerStopFlag = true;
 
 
     private void Initialize()
     {
-        //m_minute = 1;
-        //m_seconds = 0f;
+        m_minute = m_setMinute;                                        //初期化
+        m_seconds = m_setSeconds;
         m_oldSeconds = 0f;
-        m_timerText = GameObject.Find("Timer").GetComponent<Text>();
+        //m_timerText = GameObject.Find("Timer").GetComponent<Text>();
     }
 
     private void Start()
@@ -42,7 +32,7 @@ public class Timer : MonoBehaviour
 
     private void Update()
     {
-        if(m_timerStopFlag)
+        if(GameManager.m_timerFlag)
         {
             m_seconds -= Time.deltaTime;
             if (m_seconds < 0f && m_minute > 0)
@@ -52,12 +42,13 @@ public class Timer : MonoBehaviour
             }
             if ((int)m_seconds != (int)m_oldSeconds)
             {
-                m_timerText.text = m_minute.ToString("00") + ":" + ((int)m_seconds).ToString("00");
+                //m_timerText.text = m_minute.ToString("00") + ":" + ((int)m_seconds).ToString("00");
             }
             m_oldSeconds = m_seconds;
             if (m_seconds <= 0f && m_minute <= 0)                  //timerが残り0秒になったらフラグ切ってtimerStop、ゲーム開始時や停止時に切り替える
             {
-                m_timerStopFlag = false;
+                GameManager.m_timerFlag = false;
+                GameManager.m_timeUpCount = true;
             }
         }
     }

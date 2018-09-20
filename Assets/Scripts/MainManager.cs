@@ -3,36 +3,30 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-/// <summary>マップの境界</summary>
-[System.Serializable]
-public class Boundary
-{
-    public float xMin, xMax, yMin, yMax, zMin, zMax;
-}
-
-
 public class MainManager : MonoBehaviour
 {
     /// <summary>text of count down</summary>
     private Text m_text;
-    /// <summary>player's game object</summary>
-    private GameObject m_player;
-    /// <summary>playerController.cs</summary>
-    private PlayerController m_pc;
-    /// <summary>If Game starts</summary>
-    public bool m_startFlag { get; private set; }
+
     /// <summary>Flag to accelerate when game starts</summary>
     public bool m_startAcceleration { get; private set; }
+    /// <summary></summary>
+    public Text m_scoreText { get; set; }
+    private int m_score;
 
     private void Initialize()
     {
         m_startAcceleration = false;
-        m_startFlag = false;
-        m_player = GameObject.Find("Player");                         //Get Player's component
-        m_pc = m_player.GetComponent<PlayerController>();
+        GameManager.m_startFlag = false;
+        m_scoreText = GameObject.Find("Score").GetComponent<Text>();    //Display score in text
         m_text = GameObject.Find("Text").GetComponent<Text>();        //Display message in text
         m_text.text = "";
-        m_pc.m_setMoveSpeed = 0f;
+    }
+
+    /// <summary>Display score to UI</summary>
+    public void ShowScore()
+    {
+        m_scoreText.text = "Score:" + GameManager.m_scoreCount.ToString("00000000");
     }
 
     /// <summary>CountDown</summary>
@@ -46,11 +40,19 @@ public class MainManager : MonoBehaviour
         m_text.text = "ONE";
         yield return new WaitForSeconds(1f);
         m_text.text = "GO!!!";
-        m_startFlag = true;                                     //GameStart
-        m_startAcceleration = true;
+        GameManager.m_startFlag = true;                                     //GameStart
+        GameManager.m_timerFlag = true;                             //Start timer
+        m_startAcceleration = true;                             //Start Accelerator
         yield return new WaitForSeconds(1f);
         m_text.text = "";
     }
+
+    IEnumerator TimeUp()
+    {
+        m_text.text = "TimeUP!!!";
+        yield return new WaitForSeconds(3f);
+    }
+
 
     void Start()
     {
@@ -59,20 +61,13 @@ public class MainManager : MonoBehaviour
         StartCoroutine(StartWait());
     }
 
-
     void Update()
     {
-        if(m_startFlag)
+        if(GameManager.m_timeUpCount) //制限時間に達したら
         {
-            if (m_startAcceleration)                            //プレイヤーのスピードが50になる迄加速する
-            {
-                if (m_pc.m_setMoveSpeed > 50f)
-                {
-                    m_startAcceleration = false;
-                }
-                m_pc.m_setMoveSpeed += 1f;
-            }
+
         }
+
     }
 
 }

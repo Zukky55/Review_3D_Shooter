@@ -21,7 +21,6 @@ public class MoveText : MonoBehaviour
     private void Start()
     {
         m_rect = GetComponent<RectTransform>();
-        Debug.Log(m_rect.sizeDelta);
         Move();
     }
 }

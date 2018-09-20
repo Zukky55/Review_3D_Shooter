@@ -4,16 +4,12 @@ using UnityEngine;
 
 public class Test : MonoBehaviour
 {
+    [SerializeField] private float m_speed;
 
-    // Use this for initialization
-    void Start()
+    private void Update()
     {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        var pos = GameObject.Find("MotherShip").transform.position;
+        var diff = pos + transform.forward * m_speed  - transform.position;
+        Debug.Log("diff = " + diff.magnitude);
     }
 }

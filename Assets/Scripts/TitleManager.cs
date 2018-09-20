@@ -11,7 +11,7 @@ namespace Shooter.Title
         /// <summary>Text in Button</summary>
         [SerializeField] Text m_buttonText;
         /// <summary>Alpha color of Image and Text</summary>
-        [Range(0, 1)] public float m_alpha;
+        [Range(0, 1)] public float m_alpha = 0f;
         /// <summary>TitlePayer.cs</summary>
         TitlePlayer m_tp;
         /// <summary>Flag of change alpha color</summary>

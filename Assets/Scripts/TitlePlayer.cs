@@ -7,8 +7,6 @@ namespace Shooter.Title
 
     public class TitlePlayer : MonoBehaviour
     {
-        /// <summary>Player's rigidbody</summary>
-        private Rigidbody rb;
         /// <summary>Player's Turning speed</summary>
         [SerializeField] float m_spinSpeed;
         /// <summary>フレーム終了直前のposition</summary>
@@ -51,7 +49,6 @@ namespace Shooter.Title
 
         private void Start()
         {
-            rb = GetComponent<Rigidbody>();
             StartCoroutine(Wait());
         }
 

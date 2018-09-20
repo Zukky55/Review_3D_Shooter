@@ -18,53 +18,139 @@ public class BeamShot : MonoBehaviour
     Ray m_shotRay;
     RaycastHit m_shotHit;
     ParticleSystem m_beamParticle;
-    LineRenderer m_lineRenderer;
+    public LineRenderer m_lineRenderer;
+    /// <summary>it's the value of ParticleSystem.main.startSize.constant</summary>
+    private float m_constant = 0f;
+    private Vector3 m_colPos;
+    ObjectController m_oc;
+    /// <summary>Information on the "Transform" of the object hited Raycast</summary>
+    private Transform m_transformInfo;
+    /// <summary>Attack power of laser</summary>
+    [SerializeField] private int m_laserDamage = 1;
+    ParticleSystem.MainModule m_parMain;
 
-    
-    
+
+
+
     private void Shot()
     {
-        //m_timer += Time.deltaTime;
-        if(m_beamParticle.isPlaying == false)
+        if (m_laserFlag)
         {
-            m_beamParticle.Play();
-        }
-        
-
-        m_lineRenderer.enabled = true;
-        m_lineRenderer.SetPosition(0, transform.position);
-        m_shotRay.origin = transform.position;
-        m_shotRay.direction = transform.forward;
-        
-        if(Physics.Raycast(m_shotRay,out m_shotHit,m_range))
-        {
-            Debug.Log("Called Raycast : " + m_shotHit.collider.gameObject.name);
-            //Raycastと接触したコライダのトランスフォーム情報を格納
-            var transformInfo = m_shotHit.transform;
-            //接触したコライダーが付いているオブジェクトのタグに応じて爆破エフェクトを変えてシーン上から消去する
-            switch (m_shotHit.collider.tag)
+            //m_timer += Time.deltaTime;
+            if (m_beamParticle.isPlaying == false)
             {
-                case "Asteroid":
-                    Instantiate(m_eAsteroid, transformInfo.position, transformInfo.rotation);
-                    Destroy(m_shotHit.transform.gameObject);
+                m_beamParticle.Play();
+            }
+            m_lineRenderer.enabled = true;                                      //lineRenderer ON
+            m_lineRenderer.SetPosition(0, transform.position);                  //Set first position
+            m_shotRay.origin = transform.position;                          
+            m_shotRay.direction = transform.forward;
+        
+            if(Physics.Raycast(m_shotRay,out m_shotHit,m_range))                //Raycast.仮想のレーザーがcolliderに当たった時の処理
+            {
+                ProcessingRaycast(m_shotHit);
+            }
+            m_lineRenderer.SetPosition(1, m_shotRay.origin + m_shotRay.direction * m_range);
+
+
+            if (m_lineRenderer.widthMultiplier <= 2f)                           //滑らかに起動させる。(少しずつレーザーの幅を広げる)
+            {
+                m_lineRenderer.widthMultiplier += Time.deltaTime / 0.5f;
+                m_constant += Time.deltaTime / 0.5f;
+            }
+            else if (m_lineRenderer.widthMultiplier > 2f)
+            {
+                m_lineRenderer.widthMultiplier = 2f;
+                m_constant = 2f;
+            }
+
+            m_parMain.startSize = new ParticleSystem.MinMaxCurve(m_constant);
+        }
+        else if(m_lineRenderer.enabled == true)
+        {
+
+            m_lineRenderer.SetPosition(0, transform.position);                  //Beamを滑らかに停止する迄(少しずつレーザーの幅を狭める)LineRendererを表示させた儘にする
+            m_shotRay.origin = transform.position;
+            m_shotRay.direction = transform.forward;
+            m_lineRenderer.SetPosition(1, m_shotRay.origin + m_shotRay.direction * m_range);
+
+
+
+            if (m_lineRenderer.widthMultiplier > 0f)
+            {
+                m_lineRenderer.widthMultiplier -= Time.deltaTime / 0.5f;
+                m_constant -= Time.deltaTime / 0.5f;
+            }
+            else if (m_lineRenderer.widthMultiplier < 0f)
+            {
+                m_lineRenderer.widthMultiplier = 0f;
+                m_constant = 0f;
+            }
+
+            m_parMain.startSize = new ParticleSystem.MinMaxCurve(m_constant);
+        }
+
+    }
+
+    void ProcessingRaycast(RaycastHit m_shotHit)
+    {
+
+        m_oc = m_shotHit.collider.gameObject.GetComponent<ObjectController>();
+        Debug.Log(m_oc.m_myStatus.hitPoint);
+        m_transformInfo = m_shotHit.transform;                              //Raycastと接触したコライダのトランスフォーム情報を格納
+
+        if (m_oc.m_myStatus.hitPoint > m_laserDamage)                    //If HP is greater than the attack power will give damage
+        {
+            m_oc.m_myStatus.hitPoint -= m_laserDamage;
+        }
+        else
+        {
+            switch (m_oc.m_type)                                        //When HP becomes 0 or less
+            {
+                case Type.Planet:
+                    Destroy(Instantiate(m_eAsteroid, m_transformInfo.transform.position, m_transformInfo.transform.rotation), m_eAsteroid.GetComponent<ParticleSystem>().main.duration);
+                    GameManager.AddScore(m_oc.m_myStatus.point);
+                    Destroy(m_transformInfo.transform.gameObject);
                     break;
-                case "Enemy":
-                    Instantiate(m_eAsteroid, transformInfo.position, transformInfo.rotation);
-                    Destroy(m_shotHit.transform.gameObject);
+                case Type.Asteroid:
+                    Destroy(Instantiate(m_eAsteroid, m_transformInfo.transform.position, m_transformInfo.transform.rotation), m_eAsteroid.GetComponent<ParticleSystem>().main.duration);
+                    GameManager.AddScore(m_oc.m_myStatus.point);
+                    Destroy(m_transformInfo.transform.gameObject);
+                    break;
+                case Type.WeakEnemy:
+                    Destroy(Instantiate(m_eAsteroid, m_transformInfo.transform.position, m_transformInfo.transform.rotation), m_eAsteroid.GetComponent<ParticleSystem>().main.duration);
+                    GameManager.AddScore(m_oc.m_myStatus.point);
+                    Destroy(m_transformInfo.transform.gameObject);
+                    break;
+                case Type.NormalEnemy:
+                    Destroy(Instantiate(m_eAsteroid, m_transformInfo.transform.position, m_transformInfo.transform.rotation), m_eAsteroid.GetComponent<ParticleSystem>().main.duration);
+                    GameManager.AddScore(m_oc.m_myStatus.point);
+                    Destroy(m_transformInfo.transform.gameObject);
+                    break;
+                case Type.StrongEnemy:
+                    Destroy(Instantiate(m_eAsteroid, m_transformInfo.transform.position, m_transformInfo.transform.rotation), m_eAsteroid.GetComponent<ParticleSystem>().main.duration);
+                    GameManager.AddScore(m_oc.m_myStatus.point);
+                    Destroy(m_transformInfo.transform.gameObject);
+                    break;
+                case Type.MotherShip:
+                    break;
+                case Type.Other:
                     break;
                 default:
                     break;
             }
         }
-        m_lineRenderer.SetPosition(1, m_shotRay.origin + m_shotRay.direction * m_range);
+
     }
 
     /// <summary>Process to stop laser</summary>
     private void DisableEffect()
     {
-        m_beamParticle.Stop();
-        m_lineRenderer.enabled = false;
-		//m_timer = 0f;
+        if(m_lineRenderer.widthMultiplier == 0f)
+        {
+            m_lineRenderer.enabled = false;
+            m_beamParticle.Stop();
+        }
     }
 
     /// <summary>レーザーの発動制御コルーチン</summary>
@@ -79,36 +165,31 @@ public class BeamShot : MonoBehaviour
         m_laserFlag = true;
         yield return new WaitForSeconds(m_lazerLife);
         m_laserFlag = false;
+        yield return new WaitUntil(() => m_lineRenderer.widthMultiplier == 0f);
+        DisableEffect();
         yield return new WaitForSeconds(1f);
         m_isRunning = false;
 	}
 
     //Each initialization
-    private void Awake()
+    private void Start()
     {
         m_beamParticle = GetComponent<ParticleSystem>();
         m_lineRenderer = GetComponent<LineRenderer>();
         m_audioS = GetComponent<AudioSource>();
         m_audioS.volume = 0.2f;
+        m_parMain = m_beamParticle.main;                      //This is Component of ParticleSystem.main of Beam
     }
 
     private void Update()
     {
         //シフト押したらレーザーフラグon
-        if (Input.GetMouseButton(1))
+        if (Input.GetMouseButton(1) && GameManager.m_startFlag)
         {
             StartCoroutine(LaserCoroutine());
         }
 
-        //フラグonならレーザー始動、offの時レーザーがシーン上にいる場合レーザー停止
-        if (m_laserFlag)
-        {
-            Shot();
-        }
-        else if (m_lineRenderer.enabled)
-        {
+        Shot();
 
-            DisableEffect();
-        }
     }
 }

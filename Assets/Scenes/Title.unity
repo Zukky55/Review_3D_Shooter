@@ -143,7 +143,6 @@ GameObject:
   - component: {fileID: 574408291}
   - component: {fileID: 574408290}
   - component: {fileID: 574408289}
-  - component: {fileID: 574408288}
   m_Layer: 0
   m_Name: TitleCamera
   m_TagString: Untagged
@@ -151,18 +150,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &574408288
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 114354323516068008, guid: c7781d2b607964c4d8ce5a284b9d3a72,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 574408287}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!81 &574408289
 AudioListener:
   m_ObjectHideFlags: 0
@@ -446,6 +433,14 @@ Prefab:
       propertyPath: m_turningSpeed
       value: 90
       objectReference: {fileID: 0}
+    - target: {fileID: 1130852471405938, guid: 42066159624fb7b44ab1b69cde1081b8, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1520513431216460, guid: 42066159624fb7b44ab1b69cde1081b8, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 114587592744610668, guid: 42066159624fb7b44ab1b69cde1081b8, type: 2}
   m_SourcePrefab: {fileID: 100100000, guid: 42066159624fb7b44ab1b69cde1081b8, type: 2}
@@ -547,12 +542,19 @@ Prefab:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1704807774100896, guid: 2b8a6297946af4e409dfc633ca44c138, type: 2}
-      propertyPath: m_Name
-      value: TitleUI
+    - target: {fileID: 114000873496513846, guid: 2b8a6297946af4e409dfc633ca44c138,
+        type: 2}
+      propertyPath: m_Color.r
+      value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 1704807774100896, guid: 2b8a6297946af4e409dfc633ca44c138, type: 2}
-      propertyPath: m_IsActive
+    - target: {fileID: 114000873496513846, guid: 2b8a6297946af4e409dfc633ca44c138,
+        type: 2}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114000873496513846, guid: 2b8a6297946af4e409dfc633ca44c138,
+        type: 2}
+      propertyPath: m_Color.b
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
