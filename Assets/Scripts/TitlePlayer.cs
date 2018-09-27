@@ -11,7 +11,6 @@ namespace Shooter.Title
         [SerializeField] float m_spinSpeed;
         /// <summary>フレーム終了直前のposition</summary>
         private Vector3 m_offsetPosition;
-        private bool m_isRunning = false;
         [Range(0, 1)] [SerializeField] internal float x = 0;
         internal bool flag = false;
         public float waitTime = 12.5f;

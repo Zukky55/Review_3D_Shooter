@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 /// <summary>Type of object</summary>
 public enum Type
 {
@@ -11,10 +10,11 @@ public enum Type
     StrongEnemy,
     Planet,
     MotherShip,
-    Other
+    Other,
+    Player
 }
-
 /// <summary>Status of the object</summary>
+[System.Serializable]
 public struct MyStatus
 {
     /// <summary>Object moving speed</summary>
@@ -25,73 +25,98 @@ public struct MyStatus
     public int hitPoint;
     /// <summary>Object rotation speed</summary>
     public float tilit;
-
+    /// <summary>Attack power of object</summary>
+    public int attack;
+    /// <summary>Rate to shoot bullets</summary>
+    public float fireRate;
 }
-
 //Request for forced attachment of attached object
 [RequireComponent(typeof(Rigidbody))]
-
 public class ObjectController : MonoBehaviour
 {
-
     public MyStatus m_myStatus;
     [SerializeField] public Type m_type;
     private Rigidbody m_rb;
     /// <summary>Random value of vector</summary>
     private Vector3 m_vec;
+    private Animator m_animator;
 
-    private void Initialize()
+    public Animator GetAnimator()
+    {
+        return m_animator;
+    }
+
+    private void Init()
     {
         m_vec = Random.insideUnitSphere;                        //球体の-1~1の範囲で乱数を代入する
-
         switch (m_type)                                         //type毎にstatusを設定代入する
         {
             case Type.Planet:
                 m_myStatus.point = 100;
                 m_myStatus.hitPoint = 1;
                 m_myStatus.tilit = 1f;
+                m_myStatus.attack = 0;
+                m_animator = GetComponent<Animator>();
                 break;
             case Type.Asteroid:
                 m_myStatus.point = 300;
                 m_myStatus.hitPoint = 1;
                 m_myStatus.tilit = 1f;
+                m_myStatus.attack = 10;
+                m_myStatus.speed = 10f;
+                m_animator = GetComponent<Animator>();
                 break;
             case Type.WeakEnemy:
                 m_myStatus.point = 500;
-                m_myStatus.hitPoint = 5;
+                m_myStatus.hitPoint = 1;
                 m_myStatus.tilit = 0f;
+                m_myStatus.attack = 1;
+                m_myStatus.speed = 75f;
+                m_myStatus.fireRate = 1f;
+                m_animator = GetComponent<Animator>();
                 break;
             case Type.NormalEnemy:
                 m_myStatus.point = 700;
-                m_myStatus.hitPoint = 5;
+                m_myStatus.hitPoint = 15;
                 m_myStatus.tilit = 0f;
+                m_myStatus.attack = 3;
+                m_myStatus.speed = 35f;
+                m_myStatus.fireRate = 2f;
+                m_animator = GetComponent<Animator>();
                 break;
             case Type.StrongEnemy:
                 m_myStatus.point = 1000;
-                m_myStatus.hitPoint = 5;
+                m_myStatus.hitPoint = 30;
                 m_myStatus.tilit = 0f;
+                m_myStatus.attack = 5;
+                m_myStatus.speed = 35f;
+                m_myStatus.fireRate = 1f;
+                m_animator = GetComponent<Animator>();
                 break;
             case Type.MotherShip:
                 m_myStatus.point = 0;
-                m_myStatus.hitPoint = 5000;
+                m_myStatus.hitPoint = 3000;
                 m_myStatus.tilit = 0f;
+                m_myStatus.attack = 0;
+                m_animator = GameObject.Find("Ship").GetComponent<Animator>();
                 break;
             case Type.Other:
                 m_myStatus.point = 1000;
-                m_myStatus.hitPoint = 5;
-                m_myStatus.tilit = 0.5f;
+                m_myStatus.hitPoint = 1;
+                m_myStatus.tilit = 0.1f;
+                m_myStatus.attack = 0;
                 break;
-
+            case Type.Player:
+                m_myStatus.hitPoint = 300;
+                break;
             default:
                 break;
         }
     }
-
     private void Start()
     {
-        Initialize();
+        Init();
     }
-
     void Update()
     {
 
@@ -117,5 +142,6 @@ public class ObjectController : MonoBehaviour
             default:
                 break;
         }
+
     }
 }

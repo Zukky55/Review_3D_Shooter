@@ -7,9 +7,9 @@ namespace Shooter.Title
     public class TitleManager : MonoBehaviour
     {
         /// <summary>Image in Button</summary>
-        [SerializeField] Image m_buttonImage;
+        private Image m_buttonImage;
         /// <summary>Text in Button</summary>
-        [SerializeField] Text m_buttonText;
+        private Text m_buttonText;
         /// <summary>Alpha color of Image and Text</summary>
         [Range(0, 1)] public float m_alpha = 0f;
         /// <summary>TitlePayer.cs</summary>
@@ -33,7 +33,9 @@ namespace Shooter.Title
 
         private void Start()
         {
-            m_tp = GameObject.Find("Player").GetComponent<TitlePlayer>();
+            FadeManager.FadeIn();
+            GameManager.Init(); //フラグ等初期化する
+            m_tp = GameObject.Find("TitlePlayer").GetComponent<TitlePlayer>();
             m_buttonImage = GameObject.Find("Button").GetComponent<Image>();
             m_buttonText = GameObject.Find("TextOfButton").GetComponent<Text>();
             m_buttonImage.color = new Color(0.5f, 0.5f, 0.5f, m_alpha);

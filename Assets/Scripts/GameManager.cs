@@ -11,16 +11,30 @@ public class GameManager : MonoBehaviour
     public static int m_highScore { get; private set; }
     /// <summary>Flag switch</summary>
     public static bool m_timerFlag = false;
-    public static bool m_timeUpCount = false;
+    public static bool m_afterFlag = false;
+    public static bool m_clearFlag = false;
     /// <summary>If Game starts</summary>
     public static bool m_startFlag = false;
+    /// <summary>ゲームオーバー判定するフラグ</summary>
+    public static bool m_gameOverFlag = false;
+    /// <summary>highScoreをセーブするキー</summary>
     private static string m_highScoreKey = "highScore";
-    
+    public static bool m_NovelFlag = false;
+    /// <summary>MotherShipのpivotを船の中央に無い為子の変数で調整</summary>
+    [SerializeField] public static float m_multiply = 450f;
+    public static Vector3 m_pos;
+
     /// <summary>Initialize</summary>
     public static void Init()
     {
         m_scoreCount = 0;
         m_highScore = PlayerPrefs.GetInt(m_highScoreKey, 0);                    //m_highScoreを取得。保存されていなければ0で初期化
+        m_clearFlag = false;
+        m_startFlag = false;
+        m_timerFlag = false;
+        m_NovelFlag = false;
+        m_afterFlag = false;
+        m_gameOverFlag = false;
     }
     
     /// <summary>Add score of destroyed enemies</summary>
@@ -35,7 +49,7 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>Save high score</summary>
-    public void Save()
+    public static void Save()
     {
         PlayerPrefs.SetInt(m_highScoreKey, m_highScore);
         PlayerPrefs.Save();

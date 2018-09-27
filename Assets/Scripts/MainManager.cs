@@ -11,8 +11,20 @@ public class MainManager : MonoBehaviour
     /// <summary>Flag to accelerate when game starts</summary>
     public bool m_startAcceleration { get; private set; }
     /// <summary></summary>
-    public Text m_scoreText { get; set; }
+    public static Text m_scoreText { get; set; }
     private int m_score;
+    /// <summary>ゲームの制限時間を秒数変換した変数</summary>
+    public static float m_totalSeconds;
+    /// <summary>シーン上のアステロイド</summary>
+    private static GameObject[] m_asteroids;
+    /// <summary>シーン上のエネミー</summary>
+    private static GameObject[] m_enemies;
+    private static AudioSource m_audioS;
+    /// <summary>一回だけ呼び出すためのフラグ</summary>
+    private bool m_flag = true;
+
+
+
 
     private void Initialize()
     {
@@ -21,53 +33,48 @@ public class MainManager : MonoBehaviour
         m_scoreText = GameObject.Find("Score").GetComponent<Text>();    //Display score in text
         m_text = GameObject.Find("Text").GetComponent<Text>();        //Display message in text
         m_text.text = "";
+        m_audioS = GetComponent<AudioSource>();
+        m_flag = true;
     }
 
     /// <summary>Display score to UI</summary>
-    public void ShowScore()
+    public static void ShowScore()
     {
         m_scoreText.text = "Score:" + GameManager.m_scoreCount.ToString("00000000");
     }
 
-    /// <summary>CountDown</summary>
-    IEnumerator StartWait()
+    /// <summary>scene上の敵オブジェクトを全て破壊する</summary>
+    public static void DestroyAll()
     {
-        yield return new WaitForSeconds(1f);                    //CountDown
-        m_text.text = "THREE";
-        yield return new WaitForSeconds(1f);
-        m_text.text = "TWO";
-        yield return new WaitForSeconds(1f);
-        m_text.text = "ONE";
-        yield return new WaitForSeconds(1f);
-        m_text.text = "GO!!!";
-        GameManager.m_startFlag = true;                                     //GameStart
-        GameManager.m_timerFlag = true;                             //Start timer
-        m_startAcceleration = true;                             //Start Accelerator
-        yield return new WaitForSeconds(1f);
-        m_text.text = "";
+        m_asteroids = GameObject.FindGameObjectsWithTag("Asteroid"); //常にscene上にいる小惑星と敵の数を取得、」クリアーフラグが立ったら全て一斉破壊、爆破音もここで流す
+        m_enemies = GameObject.FindGameObjectsWithTag("Enemy");
+
+        foreach (var item in m_asteroids)
+        {
+            Destroy(item);
+        }
+        foreach (var item in m_enemies)
+        {
+            Destroy(item);
+        }
+        m_audioS.Play();
     }
 
-    IEnumerator TimeUp()
-    {
-        m_text.text = "TimeUP!!!";
-        yield return new WaitForSeconds(3f);
-    }
 
 
     void Start()
     {
         FadeManager.FadeIn();
         Initialize();
-        StartCoroutine(StartWait());
     }
 
-    void Update()
+    private void Update()
     {
-        if(GameManager.m_timeUpCount) //制限時間に達したら
+        if(GameManager.m_clearFlag && m_flag)//クリアしたら敵全破壊＆爆破音声再生
         {
-
+            //DestroyAll();
+            AudioManager.StopBgm();
+            m_flag = false;
         }
-
     }
-
 }

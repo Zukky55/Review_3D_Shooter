@@ -13,70 +13,95 @@ public class BoltController : MonoBehaviour
     private Vector3 m_diff;
     private ObjectController m_oc;
     /// <summary>Attack power of Bolt</summary>
-    [SerializeField] int m_boltDamage = 3;
+    [SerializeField] int m_boltAtk = 3;
     private GameObject m_motherShip;
 
     /// <summary>Processing when a bolt is hit</summary>
-    /// <param name="other">Bumped object</param>
-    private void OnParticleCollision(GameObject other)
+    /// <param name="obj">Bumped object</param>
+    private void OnParticleCollision(GameObject obj)
     {
-        m_oc = other.GetComponent<ObjectController>();
-        
-        if (m_oc.m_myStatus.hitPoint > m_boltDamage && m_oc.m_type != Type.MotherShip)                    //If HP is greater than the attack power will give damage
-        {
-            m_oc.m_myStatus.hitPoint -= m_boltDamage;
-        }
-        else
+        if(m_oc = obj.GetComponent<ObjectController>())
         {
             switch (m_oc.m_type)
             {
                 case Type.Planet:
-                    Destroy(Instantiate(m_eAsteroid, other.transform.position, other.transform.rotation), m_eAsteroid.GetComponent<ParticleSystem>().main.duration);
-                    GameManager.AddScore(m_oc.m_myStatus.point);
-                    Destroy(other.transform.gameObject);
+                    if (m_oc.m_myStatus.hitPoint > m_boltAtk) //HPが攻撃力より高い場合ダメージを与える。HP < Damageの場合破壊
+                    {
+                        m_oc.m_myStatus.hitPoint -= m_boltAtk;
+                        m_oc.GetAnimator().SetTrigger("Damage");
+                        Debug.Log("Planet's HP is: " + m_oc.m_myStatus.hitPoint);
+                    }
+                    else
+                    {
+                        Destroy(Instantiate(m_eAsteroid, obj.transform.position, obj.transform.rotation), m_eAsteroid.GetComponent<ParticleSystem>().main.duration);
+                        GameManager.AddScore(m_oc.m_myStatus.point);
+                        MainManager.ShowScore();
+                        Destroy(obj.transform.gameObject);
+                    }
                     break;
                 case Type.Asteroid:
-                    Destroy(Instantiate(m_eAsteroid, other.transform.position, other.transform.rotation), m_eAsteroid.GetComponent<ParticleSystem>().main.duration);
-                    GameManager.AddScore(m_oc.m_myStatus.point);
-                    Destroy(other.transform.gameObject);
+                    if (m_oc.m_myStatus.hitPoint > m_boltAtk)
+                    {
+                        m_oc.m_myStatus.hitPoint -= m_boltAtk;
+                        m_oc.GetAnimator().SetTrigger("Damage");
+                        Debug.Log("Asteroid's HP is: " + m_oc.m_myStatus.hitPoint);
+
+                    }
+                    else
+                    {
+                        Destroy(Instantiate(m_eAsteroid, obj.transform.position, obj.transform.rotation), m_eAsteroid.GetComponent<ParticleSystem>().main.duration);
+                        GameManager.AddScore(m_oc.m_myStatus.point);
+                        MainManager.ShowScore();
+                        Destroy(obj.transform.gameObject);
+                    }
                     break;
                 case Type.WeakEnemy:
-                    Destroy(Instantiate(m_eAsteroid, other.transform.position, other.transform.rotation), m_eAsteroid.GetComponent<ParticleSystem>().main.duration);
-                    GameManager.AddScore(m_oc.m_myStatus.point);
-                    Destroy(other.transform.gameObject);
-                    break;
                 case Type.NormalEnemy:
-                    Destroy(Instantiate(m_eAsteroid, other.transform.position, other.transform.rotation), m_eAsteroid.GetComponent<ParticleSystem>().main.duration);
-                    GameManager.AddScore(m_oc.m_myStatus.point);
-                    Destroy(other.transform.gameObject);
-                    break;
                 case Type.StrongEnemy:
-                    Destroy(Instantiate(m_eAsteroid, other.transform.position, other.transform.rotation), m_eAsteroid.GetComponent<ParticleSystem>().main.duration);
-                    GameManager.AddScore(m_oc.m_myStatus.point);
-                    Destroy(other.transform.gameObject);
+                    if (m_oc.m_myStatus.hitPoint > m_boltAtk)
+                    {
+                        var enemyCon = obj.GetComponent<EnemyController>(); //ダメージを受けた時色を変えるアニメーション
+                        enemyCon.GetAnimator().SetTrigger("Damage");
+                        m_oc.m_myStatus.hitPoint -= m_boltAtk;
+                        Debug.Log("Enemy's HP is: " + m_oc.m_myStatus.hitPoint);
+                    }
+                    else
+                    {
+                        Destroy(Instantiate(m_eEnemy, obj.transform.position, obj.transform.rotation), m_eEnemy.GetComponent<ParticleSystem>().main.duration);
+                        GameManager.AddScore(m_oc.m_myStatus.point);
+                        Destroy(obj.transform.gameObject);
+                        MainManager.ShowScore();
+                    }
                     break;
                 case Type.MotherShip:
-                    break;
                 case Type.Other:
-                    break;
-                default:
+                case Type.Player:
                     break;
             }
         }
         Destroy(gameObject);
     }
 
-    void Start()
+    private void Init()
     {
         m_rb = GetComponent<Rigidbody>();
         m_motherShip = GameObject.Find("MotherShip");
+    }
+
+    void Start()
+    {
+        Init();
         m_rb.velocity = transform.forward * m_speed;                                // Shot injection speed
     }
 
     private void Update()
     {
-        m_diff = m_motherShip.transform.position - transform.position;
-        if(m_diff.magnitude > 2000f)
+
+        if (m_motherShip != null) // MotherShipから一定距離離れたら自己破壊
+        {
+            m_diff = (m_motherShip.transform.position + (m_motherShip.transform.forward * GameManager.m_multiply)) - transform.position;
+        }
+        if (m_diff.magnitude > 1500f)
         {
             Destroy(gameObject);
         }

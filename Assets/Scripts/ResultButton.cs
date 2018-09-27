@@ -2,15 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ResultButton : MonoBehaviour {
-
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+public class ResultButton : MonoBehaviour
+{
+    public void OnClick()
+    {
+        FadeManager.FadeOut(0, 2f);
+    }
 }

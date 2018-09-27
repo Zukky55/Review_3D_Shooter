@@ -11,7 +11,8 @@ public class CameraMove : MonoBehaviour
     private Quaternion m_r;
     [SerializeField] float x = 40f;
     private Vector3 m_diff;
-    [SerializeField] float m_ac = 0f;
+    [SerializeField] private float m_setAc;
+    private float m_ac = 0f;
     /// <summary>ステージ開始後カメラを滑らかにスピードアップさせるフラグ</summary>
     private bool m_flagAcceleratioin = true;
 
@@ -21,21 +22,18 @@ public class CameraMove : MonoBehaviour
         m_rb = GetComponent<Rigidbody>();
         m_cameraPos = GameObject.Find("CameraPos");
         m_ac = 0f;
-
     }
 
     private void FixedUpdate()
     {
-        if (GameManager.m_startFlag)                           //stage startしている間
-        {
             if (m_flagAcceleratioin)                    //加速度が一定に達する迄加速
             {
-                if (m_ac > 5f)
+                if (m_ac > m_setAc)
                 {
-                    m_ac = 5f;
+                    m_ac = m_setAc;
                     m_flagAcceleratioin = false;
                 }
-                m_ac += Time.deltaTime;
+                m_ac += 0.1f;
             }
 
             m_diff = m_cameraPos.transform.position - transform.position;               //このm_diffはCameraPosition用のオブジェクトとカメラとの差異を計算してvelocityが向かう先はCameraPosにして減速しても変なカメラアングルにならない様に設定している
@@ -52,7 +50,5 @@ public class CameraMove : MonoBehaviour
             }
             m_rb.AddTorque(new Vector3(m_r.x, m_r.y, m_r.z) * x, ForceMode.VelocityChange);
             transform.rotation = m_rot;
-        }
     }
-
 }

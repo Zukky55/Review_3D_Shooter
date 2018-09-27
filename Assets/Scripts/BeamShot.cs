@@ -3,8 +3,9 @@ using System.Collections;
 public class BeamShot : MonoBehaviour
 {
 	/// <summary>レーザーの飛距離</summary>
-    [SerializeField] float m_range = 100f;
-	[SerializeField] float m_lazerLife = 2f;
+    [SerializeField] float m_range = 200f;
+    /// <summary>Laser's life time</summary>
+	[SerializeField] float m_laserLife = 2f;
     /// <summary>explosion of enemy</summary>
     [SerializeField] GameObject m_eEnemy;
     /// <summary>explosion of asteroid</summary>
@@ -26,7 +27,7 @@ public class BeamShot : MonoBehaviour
     /// <summary>Information on the "Transform" of the object hited Raycast</summary>
     private Transform m_transformInfo;
     /// <summary>Attack power of laser</summary>
-    [SerializeField] private int m_laserDamage = 1;
+    [SerializeField] private int m_laserAtk = 3;
     ParticleSystem.MainModule m_parMain;
 
 
@@ -48,7 +49,7 @@ public class BeamShot : MonoBehaviour
         
             if(Physics.Raycast(m_shotRay,out m_shotHit,m_range))                //Raycast.仮想のレーザーがcolliderに当たった時の処理
             {
-                ProcessingRaycast(m_shotHit);
+                ProcessingRaycast(m_shotHit);　//　ここに書くとネストしすぎる為メソッドで別に呼ぶ
             }
             m_lineRenderer.SetPosition(1, m_shotRay.origin + m_shotRay.direction * m_range);
 
@@ -92,55 +93,64 @@ public class BeamShot : MonoBehaviour
 
     }
 
+    /// <summary>Shotの</summary>
+    /// <param name="m_shotHit"></param>
     void ProcessingRaycast(RaycastHit m_shotHit)
     {
-
         m_oc = m_shotHit.collider.gameObject.GetComponent<ObjectController>();
-        Debug.Log(m_oc.m_myStatus.hitPoint);
         m_transformInfo = m_shotHit.transform;                              //Raycastと接触したコライダのトランスフォーム情報を格納
 
-        if (m_oc.m_myStatus.hitPoint > m_laserDamage)                    //If HP is greater than the attack power will give damage
+        switch (m_oc.m_type)
         {
-            m_oc.m_myStatus.hitPoint -= m_laserDamage;
-        }
-        else
-        {
-            switch (m_oc.m_type)                                        //When HP becomes 0 or less
-            {
-                case Type.Planet:
-                    Destroy(Instantiate(m_eAsteroid, m_transformInfo.transform.position, m_transformInfo.transform.rotation), m_eAsteroid.GetComponent<ParticleSystem>().main.duration);
-                    GameManager.AddScore(m_oc.m_myStatus.point);
-                    Destroy(m_transformInfo.transform.gameObject);
-                    break;
-                case Type.Asteroid:
-                    Destroy(Instantiate(m_eAsteroid, m_transformInfo.transform.position, m_transformInfo.transform.rotation), m_eAsteroid.GetComponent<ParticleSystem>().main.duration);
-                    GameManager.AddScore(m_oc.m_myStatus.point);
-                    Destroy(m_transformInfo.transform.gameObject);
-                    break;
-                case Type.WeakEnemy:
-                    Destroy(Instantiate(m_eAsteroid, m_transformInfo.transform.position, m_transformInfo.transform.rotation), m_eAsteroid.GetComponent<ParticleSystem>().main.duration);
-                    GameManager.AddScore(m_oc.m_myStatus.point);
-                    Destroy(m_transformInfo.transform.gameObject);
-                    break;
-                case Type.NormalEnemy:
-                    Destroy(Instantiate(m_eAsteroid, m_transformInfo.transform.position, m_transformInfo.transform.rotation), m_eAsteroid.GetComponent<ParticleSystem>().main.duration);
-                    GameManager.AddScore(m_oc.m_myStatus.point);
-                    Destroy(m_transformInfo.transform.gameObject);
-                    break;
-                case Type.StrongEnemy:
-                    Destroy(Instantiate(m_eAsteroid, m_transformInfo.transform.position, m_transformInfo.transform.rotation), m_eAsteroid.GetComponent<ParticleSystem>().main.duration);
-                    GameManager.AddScore(m_oc.m_myStatus.point);
-                    Destroy(m_transformInfo.transform.gameObject);
-                    break;
-                case Type.MotherShip:
-                    break;
-                case Type.Other:
-                    break;
-                default:
-                    break;
-            }
-        }
+            case Type.Planet:
+                if (m_oc.m_myStatus.hitPoint > m_laserAtk) //HPが攻撃力より高い場合ダメージを与える。HP < Damageの場合破壊
+                {
+                    m_oc.m_myStatus.hitPoint -= m_laserAtk;
+                    m_oc.GetAnimator().SetTrigger("Damage");
 
+                }
+                else
+                {
+                    Destroy(Instantiate(m_eAsteroid, m_transformInfo.transform.position, m_transformInfo.transform.rotation), m_eAsteroid.GetComponent<ParticleSystem>().main.duration);//爆破エフェクト
+                    GameManager.AddScore(m_oc.m_myStatus.point);
+                    Destroy(m_transformInfo.transform.gameObject);
+                }
+                break;
+            case Type.Asteroid:
+                if (m_oc.m_myStatus.hitPoint > m_laserAtk)
+                {
+                    m_oc.m_myStatus.hitPoint -= m_laserAtk;
+                    m_oc.GetAnimator().SetTrigger("Damage");
+
+                }
+                else
+                {
+                    Destroy(Instantiate(m_eAsteroid, m_transformInfo.transform.position, m_transformInfo.transform.rotation), m_eAsteroid.GetComponent<ParticleSystem>().main.duration);//爆破エフェクト
+                    GameManager.AddScore(m_oc.m_myStatus.point);
+                    Destroy(m_transformInfo.transform.gameObject);
+                }
+                break;
+            case Type.WeakEnemy:
+            case Type.NormalEnemy:
+            case Type.StrongEnemy:
+                if (m_oc.m_myStatus.hitPoint > m_laserAtk)
+                {
+                    var enemyCon = m_transformInfo.GetComponent<EnemyController>(); //ダメージを受けた時色を変えるアニメーション
+                    enemyCon.GetAnimator().SetTrigger("Damage");
+                    m_oc.m_myStatus.hitPoint -= m_laserAtk;
+                }
+                else
+                {
+                    Destroy(Instantiate(m_eEnemy, m_transformInfo.transform.position, m_transformInfo.transform.rotation), m_eEnemy.GetComponent<ParticleSystem>().main.duration);//爆破エフェクト
+                    GameManager.AddScore(m_oc.m_myStatus.point);
+                    Destroy(m_transformInfo.transform.gameObject);
+                }
+                break;
+            case Type.MotherShip:
+            case Type.Other:
+            default:
+                break;
+        }
     }
 
     /// <summary>Process to stop laser</summary>
@@ -156,14 +166,14 @@ public class BeamShot : MonoBehaviour
     /// <summary>レーザーの発動制御コルーチン</summary>
     IEnumerator LaserCoroutine()
 	{
-        //レーザーを発動してから(m_lazerLife)秒経ったらレーザーを停止する。呼び出し元はUpdate()なのでコルーチンが処理中の間は重複実行させない様にフラグ管理している。
+        //レーザーを発動してから(m_laserLife)秒経ったらレーザーを停止する。呼び出し元はUpdate()なのでコルーチンが処理中の間は重複実行させない様にフラグ管理している。
 		if(m_isRunning)
         {
             yield break;
         }
         m_isRunning = true;
         m_laserFlag = true;
-        yield return new WaitForSeconds(m_lazerLife);
+        yield return new WaitForSeconds(m_laserLife);
         m_laserFlag = false;
         yield return new WaitUntil(() => m_lineRenderer.widthMultiplier == 0f);
         DisableEffect();
@@ -184,7 +194,7 @@ public class BeamShot : MonoBehaviour
     private void Update()
     {
         //シフト押したらレーザーフラグon
-        if (Input.GetMouseButton(1) && GameManager.m_startFlag)
+        if (GameManager.m_startFlag)
         {
             StartCoroutine(LaserCoroutine());
         }

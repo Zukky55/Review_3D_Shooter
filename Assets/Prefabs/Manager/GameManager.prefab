@@ -1,0 +1,205 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1153051251514110}
+  m_IsPrefabAsset: 1
+--- !u!1 &1153051251514110
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4625878488862468}
+  - component: {fileID: 82396665773175162}
+  - component: {fileID: 114623294584697968}
+  - component: {fileID: 114454670052732186}
+  - component: {fileID: 114711676179439674}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4625878488862468
+Transform:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1153051251514110}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &82396665773175162
+AudioSource:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1153051251514110}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 0ede6c820c34f884689333a2807eb7df, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 0.5
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &114454670052732186
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1153051251514110}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0d61578f6e3c0a43a839c75a056f7f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_list_start:
+  - "\u3000\u3000\u8239\u9577\uFF1A\u30FB\u30FB\u30FB\u30FB\u30FB\u968A\u54E1\u30FB\u30FB\u30FB\r"
+  - "\u5FF0\u718A\u968A\u54E1\uFF1A\u30FB\u30FB\u30FB\u30FB\u30FB\u3093\u30FC\u30FB\u30FB\u30FB\r\n"
+  - "\u3000\u3000\u8239\u9577\uFF1A\u30FB\u30FB\u5FF0\u718A\u968A\u54E1\uFF01\uFF01\r\n"
+  - "\u5FF0\u718A\u968A\u54E1\uFF1A\u304A\u308F\u3063\uFF01\uFF01\u306F\u3044\uFF01\uFF01\r\n\u3000\u3000\u3000\u3000\u3000\u3042\u308C\uFF1F\u5BE9\u67FB\u4F1A\u306F\uFF1F\uFF1F\n"
+  - "\u3000\u3000\u8239\u9577\uFF1A\u4F55\u3092\u3057\u3066\u3044\u308B\u3093\u3060\uFF01\u5468\u308A\u3092\u898B\u308D\uFF01\uFF01\r\n"
+  - "\u5FF0\u718A\u968A\u54E1\uFF1A\u3093\uFF1F\u3048\uFF01\uFF1F\u5B87\u5B99\uFF01\uFF1F\u5B87\u5B99\u8239\uFF01\uFF1F\u5C0F\u60D1\u661F\uFF01\uFF1F\r\n\u3000\u3000\u3000\u3000\u3000\u6226\u95D8\u6A5F\u307E\u3067\u6765\u3066\u308B\u3084\u3093\uFF01\uFF01\r\n\u3000\u3000\u3000\u3000\u3000\u3069\u3063\u304B\u3089\u51FA\u3066\u3093\u306E\u3042\u308C\uFF01\uFF1F\r"
+  - "\u3000\u3000\u8239\u9577\uFF1A\u3053\u306E\u307E\u307E\u3067\u306F\u8239\u304C\u6C88\u3093\u3067\u3057\u307E\u3046\uFF01\uFF01\uFF01\r\n"
+  - "\u3000\u3000\u8239\u9577\uFF1A\u30BF\u30FC\u30B2\u30C3\u30C8\u3092\u30ED\u30C3\u30AF\u3057\u3066\n\u3000\u3000\u3000\u3000\u3000\u5BFE\u8C61\u3092\u5168\u3066\u7834\u58CA\u3059\u308B\u306E\u306B\u6642\u9593\u304C\u639B\u304B\u308B\uFF01\r\n\u3000\u3000\u3000\u3000\u3000\u305D\u308C\u307E\u3067\u306A\u3093\u3068\u3057\u3066\u3082\u8010\u3048\u308D\uFF01\uFF01"
+  - "\u5FF0\u718A\u968A\u54E1\uFF1A\u3048\u3063\uFF1F\u308A\u3087\u3001\u4E86\u89E3\uFF01\uFF01\uFF01\r\n"
+  m_list_2:
+  - "\u3082\u3046\u5C11\u3057\u3060\u3001\u8010\u3048\u3066\u304F\u308C\uFF01\uFF01"
+  - "\u5FF0\u718A\u968A\u54E1\uFF1A\u4E86\u89E3\uFF01\uFF01\r\n"
+  m_list_clear:
+  - "\u3000\u3000\u8239\u9577\uFF1A\u3088\u3057\uFF01\u7206\u7834\u5B8C\u4E86\u3060\uFF01\uFF01\u3088\u304F\u3084\u3063\u305F\uFF01\uFF01\uFF01\r"
+  - "\u5FF0\u718A\u968A\u54E1\uFF1A\u3088\u3063\u3057\u3083\u3042\u3042\u3042\u3042\uFF01\uFF01\uFF01\uFF01\r"
+  - "\u3000\u3000\u8239\u9577\uFF1A\u5730\u7403\u3078\u5E30\u9084\u3059\u308B\u305E\uFF01\uFF01\uFF01\r"
+  - "\u5FF0\u718A\u968A\u54E1\uFF1A\u4E86\u89E3\u3067\u3059\uFF01\uFF01\r"
+  - "\u5FF0\u718A\u968A\u54E1\uFF1A\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\n\u3000\u3000\u3000\u3000\u3000\u30FB\u30FB\u30FB\u305D\u3046\u3044\u3048\u3070\u5BE9\u67FB\u4F1A\u306F\uFF1F"
+  m_list_go:
+  - "\u3000\u3000\u8239\u9577\uFF1A\u3046\u308F\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\uFF01\uFF01\uFF01\uFF01\uFF01\r"
+  - "\u5FF0\u718A\u968A\u54E1\uFF1A\u8239\u9577\u3049\u304A\u304A\u304A\u304A\u304A\u304A\u304A\u304A\u304A\u304A\u304A\u304A\u304A\uFF01\uFF01\uFF01\uFF01\r"
+  m_list_after: []
+  m_text: {fileID: 0}
+  m_image: {fileID: 0}
+  m_startWait: 0.5
+  m_displayWait: 1
+  m_gSText: {fileID: 0}
+  m_displaySpeed: 0.1
+  m_alpha: 1
+--- !u!114 &114623294584697968
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1153051251514110}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39434b9a30fce8e4bbea64a967969c5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114711676179439674
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1153051251514110}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ad1c8cb217af40408c511a68cf30caa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_setMinute: 50
+  m_setSeconds: 30

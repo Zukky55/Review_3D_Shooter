@@ -6,6 +6,12 @@ TagManager:
   tags:
   - Asteroid
   - Enemy
+  - Novel
+  - Boundary
+  - MediumEnemy
+  - SmallEnemy
+  - BossEnemy
+  - MotherShip
   layers:
   - Default
   - TransparentFX
@@ -19,7 +25,7 @@ TagManager:
   - Player
   - Enemy
   - Obstacle
-  - 
+  - MotherShip
   - 
   - 
   - 
