@@ -52,6 +52,7 @@ public class Timer : MonoBehaviour
             if (m_seconds <= 0f && m_minute <= 0)                  //timerが残り0秒になったらフラグ切ってtimerStop、ゲーム開始時や停止時に切り替える
             {
                 GameManager.m_timerFlag = false;
+                GameManager.m_startFlag = false;
                 GameManager.m_clearFlag = true;
             }
         }

@@ -12,7 +12,7 @@ public class FireDeathRay : MonoBehaviour
     /// <summary>座標</summary>
     private Vector3 m_position;
     /// <summary>着弾迄の時間</summary>
-    [SerializeField] private float m_period = 2f;
+    [SerializeField] private float m_period = 3f;
     /// <summary>加速度</summary>
     private Vector3 m_acceleration;
     /// <summary>差分</summary>

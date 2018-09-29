@@ -928,10 +928,12 @@ MonoBehaviour:
   m_laserFireRate: 1
   m_weaponSE: {fileID: 8300000, guid: bf75b984df8a84987bcf3a8bf6e2862d, type: 3}
   m_laserSE: {fileID: 8300000, guid: 45efc082901884846b199f73b6b96879, type: 3}
-  m_turningSpeed: 90
+  m_turningSpeed: 60
   m_rotateTime: 1
   m_setMovingSpeed: 60
   m_spawnAngle: 5
+  m_eEnemy: {fileID: 0}
+  m_eAsteroid: {fileID: 0}
 --- !u!114 &114741577505763912
 MonoBehaviour:
   m_ObjectHideFlags: 1

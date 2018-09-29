@@ -76,5 +76,6 @@ public class MainManager : MonoBehaviour
             AudioManager.StopBgm();
             m_flag = false;
         }
+        Debug.Log(GameManager.m_startFlag);
     }
 }

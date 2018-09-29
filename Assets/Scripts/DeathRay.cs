@@ -51,6 +51,16 @@ public class DeathRay : MonoBehaviour
             m_min = m_max += m_calculationResult * Time.deltaTime;
             m_DR_main.startSize = new ParticleSystem.MinMaxCurve(m_min, m_max);
         }
+        if(GameManager.m_clearFlag) //クリアしたら、滑らかにパーティクルを止める
+        {
+            m_min = m_max -= Time.deltaTime;
+            m_DR_main.startSize = new ParticleSystem.MinMaxCurve(m_min, m_max);
+            if(m_min < 0f || m_max < 0f)
+            {
+                m_min = m_max = 0f;
+                m_drps.Stop();
+            }
+        }
     }
 
     /// <summary>全ての敵オブジェクト情報を返す</summary>
@@ -85,8 +95,33 @@ public class DeathRay : MonoBehaviour
                 test.m_target = obj;
                 yield return null;
             }
-            yield return new WaitForSeconds(2f);
-            GetTarget();
+            yield return new WaitForSeconds(4f);
+            foreach (var obj in m_targets) //もれた敵を破壊
+            {
+                if (obj != null)
+                {
+                    m_oc = obj.GetComponent<ObjectController>();
+                    switch (m_oc.m_type)
+                    {
+                        case Type.Asteroid:
+                            Destroy(Instantiate(m_eAsteroid, obj.transform.position, obj.transform.rotation), m_eAsteroid.GetComponent<ParticleSystem>().main.duration);
+                            Destroy(obj.transform.gameObject);
+                            break;
+                        case Type.WeakEnemy:
+                        case Type.NormalEnemy:
+                        case Type.StrongEnemy:
+                        case Type.Planet:
+                            Destroy(Instantiate(m_eEnemy, obj.transform.position, obj.transform.rotation), m_eEnemy.GetComponent<ParticleSystem>().main.duration);
+                            Destroy(obj.transform.gameObject);
+                            break;
+                        case Type.MotherShip:
+                        case Type.Other:
+                        case Type.Player:
+                        default:
+                            break;
+                    }
+                }
+            }
         }
         GameManager.m_afterFlag = true;
     }
@@ -124,31 +159,7 @@ public class DeathRay : MonoBehaviour
 
     /// <summary>触れたら敵オブジェクト破壊</summary>
     /// <param name="obj">enemy object</param>
-    private void OnParticleCollision(GameObject obj)
-    {
-        if (m_oc = obj.GetComponent<ObjectController>())
-        {
-            switch (m_oc.m_type)
-            {
-                case Type.Asteroid:
-                    Destroy(Instantiate(m_eAsteroid, obj.transform.position, obj.transform.rotation), m_eAsteroid.GetComponent<ParticleSystem>().main.duration);
-                    Destroy(obj.transform.gameObject);
-                    break;
-                case Type.WeakEnemy:
-                case Type.NormalEnemy:
-                case Type.StrongEnemy:
-                case Type.Planet:
-                    Destroy(Instantiate(m_eEnemy, obj.transform.position, obj.transform.rotation), m_eEnemy.GetComponent<ParticleSystem>().main.duration);
-                    Destroy(obj.transform.gameObject);
-                    break;
-                case Type.MotherShip:
-                case Type.Other:
-                case Type.Player:
-                default:
-                    break;
-            }
-        }
-    }
+
 
 
     private void Init()
@@ -158,7 +169,7 @@ public class DeathRay : MonoBehaviour
         m_DR_main = m_drps.main;
         m_min = m_max = 0f; //Initialize of Min and Max variables
         m_DR_main.startSize = new ParticleSystem.MinMaxCurve(m_min, m_max); //The initial value is 0 for both min and max
-        m_calculationResult = m_targetPaticlerSize / MainManager.m_totalSeconds; //任意の数値 / 到達させたい時間
+        m_calculationResult = m_targetPaticlerSize / MainManager.m_totalSeconds; //目標値 / 到達させたい時間
         m_audioS = GetComponent<AudioSource>();
 
     }

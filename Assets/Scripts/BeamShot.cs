@@ -193,7 +193,6 @@ public class BeamShot : MonoBehaviour
 
     private void Update()
     {
-        //シフト押したらレーザーフラグon
         if (GameManager.m_startFlag)
         {
             StartCoroutine(LaserCoroutine());

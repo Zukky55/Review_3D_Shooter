@@ -124,10 +124,15 @@ public class UITextManager : MonoBehaviour
                 GameManager.m_startFlag = false;
                 GameManager.m_NovelFlag = true;
             }
-            if(GameManager.m_afterFlag)//タイムアップまで持ちこたえた時のみ
+            if (GameManager.m_clearFlag)//タイムアップまで持ちこたえた時のみ
+            {
+                GameManager.m_clearFlag = false;
+            }
+            if (GameManager.m_afterFlag)//クリア時の処理終了後の遷移
             {
                 FadeManager.FadeOut(2,2f); //resultSceneへ
             }
+            
 
             if (GameManager.m_gameOverFlag)//gameOverの時のみ
             {
